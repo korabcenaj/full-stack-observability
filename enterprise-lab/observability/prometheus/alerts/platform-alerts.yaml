@@ -1,0 +1,58 @@
+groups:
+  - name: platform-health-alerts
+    rules:
+      - alert: NodeMemoryUsageHigh
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Host memory usage high on {{ $labels.instance }}"
+
+      - alert: PodCrashLooping
+        expr: rate(kube_pod_container_status_restarts_total[5m]) * 60 > 2
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is crashlooping"
+
+      - alert: AmdGpuTemperatureHigh
+        expr: rocm_gpu_temperature_celsius > 82
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "AMD GPU {{ $labels.gpu_id }} on {{ $labels.node }} exceeded temperature threshold (82°C)"
+
+      - alert: ValkeyMemoryNearLimit
+        expr: valkey_memory_used_bytes / valkey_memory_max_bytes * 100 > 90
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Valkey in-memory store is at {{ $value }}% capacity limit"
+
+      - alert: PostgresReplicationLag
+        expr: pg_replication_lag_seconds > 30
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "PostgreSQL HA replication lag exceeds 30 seconds"
+
+      - alert: DataStreamHighConsumerLag
+        expr: stream_backpressure_lag > 5000
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Telemetry Stream consumer lag exceeded 5,000 pending events"
+
+      - alert: DataStreamCircuitBreakerTripped
+        expr: stream_circuit_breaker_state == 1
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Data Stream Processor Circuit Breaker TRIPPED due to downstream failure rate > 5%"

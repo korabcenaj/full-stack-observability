@@ -1,0 +1,17 @@
+node_modules/
+venv/
+.venv/
+__pycache__/
+*.pyc
+build/
+dist/
+.terraform/
+*.tfstate
+*.tfstate.*
+.env
+.env.*
+*.pem
+*.key
+*.crt
+kubeconfig
+kubeconfig-*
