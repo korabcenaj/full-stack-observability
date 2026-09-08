@@ -54,3 +54,4 @@ Prometheus, Alertmanager, Grafana, Loki, Tempo, Cilium, Hubble, Kepler, Kubernet
 
 ---
 See the full case study at [https://korab.space/projects/full-stack-observability/](https://korab.space/projects/full-stack-observability/).
+<!-- canary-check-471428 -->
